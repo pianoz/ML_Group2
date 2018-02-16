@@ -66,7 +66,7 @@ void myoOnEmgData(Device myo, long timestamp, int[] data) {
   // int[] data <- 8 values from -128 to 127
    OscMessage msg = new OscMessage("/wek/inputs");
    for (int i = 0; i<data.length; i++){
-     msg.add(data[i]);
+     msg.add((float)data[i]);
    }
      oscP5.send(msg, dest);
      
