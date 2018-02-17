@@ -64,7 +64,7 @@ void draw() {
   image(img,0,0);
   }
   if(id == 3){
-  img = loadImage("billplates.png");
+  img = loadImage("billplates.jpg");
   image(img,0,0);
   }
   // Drawing:
