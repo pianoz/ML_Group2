@@ -2,10 +2,14 @@ import de.voidplus.myo.*;
 import oscP5.*;
 import netP5.*;
 
+int id=0;
 OscP5 oscP5;
 NetAddress dest;
 Myo myo;
 ArrayList<ArrayList<Integer>> sensors;
+
+PFont f;
+PImage img;
 
 float[][] SmoothArray = { {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}};   
 
@@ -50,7 +54,19 @@ int average(int j){
 void draw() {
   background(255);
   // ...
-  
+  if(id == 1){
+  background(0);
+   img = loadImage("dyel.jpg");
+  image(img,0,0);
+  }
+  if(id == 2){
+  img = loadImage("mebro.jpg");
+  image(img,0,0);
+  }
+  if(id == 3){
+  img = loadImage("billplates.png");
+  image(img,0,0);
+  }
   // Drawing:
   synchronized (this) {
     for (int i=0; i<8; i++) {
@@ -81,6 +97,7 @@ void sendOsc(int data[]) {
   msg.add((int)data[8]);
   oscP5.send(msg, dest);
 }
+
 void myoOnEmgData(Device myo, long timestamp, int[] data) {
   // println("Sketch: myoOnEmgData, device: " + myo.getId());
   // int[] data <- 8 values from -128 to 127
@@ -117,8 +134,22 @@ void oscEvent(OscMessage theOscMessage) {
         float noclick = theOscMessage.get(0).floatValue();
         float clickL = theOscMessage.get(1).floatValue();
         float clickR = theOscMessage.get(2).floatValue();
-       // println("Received new output values from Wekinator");  
-         print("message recieved from Wekinator:", noclick,clickL,clickR);
+        //println("Received new output values from Wekinator");  
+        print("message recieved from Wekinator:", noclick,clickL,clickR);
+        float temp = Math.max(Math.max(noclick,clickL),Math.max(clickL,clickR));
+        if (temp == noclick){
+          id = 1;
+          redraw();
+        }
+        if (temp == clickL){
+          id=2;
+           redraw();
+        }
+        if (temp == clickR){
+          id=3;
+          redraw();
+        }
+
       } else {
         println("Error: unexpected OSC message received by Processing: ");
         theOscMessage.print();
