@@ -11,7 +11,9 @@ ArrayList<ArrayList<Integer>> sensors;
 PFont f;
 PImage img;
 
-float[][] SmoothArray = { {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}};   
+float topscore = 0;
+
+float[][] SmoothArray = { {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}};   
 
 void setup() {
   size(800, 400);
@@ -34,7 +36,7 @@ void setup() {
 //this function moves the values down by one each iteration of the array
 void writeback(int j){
     SmoothArray[0][j] = 0;
-    for(int i=4; i>0; i--){
+    for(int i=9; i>0; i--){
       float temp = SmoothArray[i][j];
       SmoothArray[i-1][j] = temp;
     } 
@@ -43,8 +45,11 @@ void writeback(int j){
 //averages the rows
 int average(int j){
   int sum = 0;
-  for(int i=0;i<4;i++){
+  for(int i=0;i<9;i++){
     sum += SmoothArray[i][j];
+  }
+  if(sum > topscore){
+    topscore = sum;
   }
   return round(sum/5);
 
@@ -68,6 +73,8 @@ void draw() {
   image(img,0,0);
   }
   // Drawing:
+  textSize(40);
+  text(topscore, 10, 30); 
   synchronized (this) {
     for (int i=0; i<8; i++) {
       if (!sensors.get(i).isEmpty()) {
